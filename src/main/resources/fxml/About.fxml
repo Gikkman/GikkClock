@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gikk.clock.AboutController">
+   <top>
+      <Label text="Gikk Clock" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+      </Label>
+   </top>
+   <center>
+      <GridPane vgap="6.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Because BlasphemousRoar neede a timer, and since he's an awesome dude, I though: &quot;Why the heck not?&quot;" textAlignment="CENTER" wrapText="true" />
+            <VBox alignment="CENTER" spacing="12.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <children>
+                  <Label text="The program outputs a number of text files into the /fiels directory. These can, with advantage, be used in OBS as text sources." textAlignment="CENTER" wrapText="true" />
+                  <Label text="Be aware that there might be a few moments of delay between the time you see in the program and the time displayed in OBS. This is normal, since OBS inspects the files once per second, and we write to the files about once per second too. The text in OBS might flash/disapear/stall sometimes too. This is due to race condition between us writing to the file, and OBS inspecting the file at the same time. It usually sorts itself out after a second or two." textAlignment="CENTER" wrapText="true" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" spacing="12.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <children>
+                  <TextFlow textAlignment="CENTER">
+                     <children>
+                        <Label text="Currently in version 0.1. Use this software at your own risk." textAlignment="CENTER" />
+                        <Label text="Should you be interested in the source code, it is availible at Github: " />
+                        <Hyperlink focusTraversable="false" onAction="#onHyperlink" text="https://github.com/Gikkman/GikkClock" />
+                     </children>
+                  </TextFlow>
+                  <TextFlow prefWidth="200.0" textAlignment="CENTER">
+                     <children>
+                        <Label text="Code is written by Gikkman" />
+                     </children>
+                  </TextFlow>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="6.0" right="6.0" />
+         </padding>
+      </GridPane>
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+             <Button id="buttonClose" fx:id="buttonClose" mnemonicParsing="false" onAction="#onClose" text="Close">
+               <padding>
+                  <Insets bottom="12.0" left="24.0" right="24.0" top="12.0" />
+               </padding>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="12.0" />
+         </padding>
+      </HBox>
+   </bottom>
+</BorderPane>

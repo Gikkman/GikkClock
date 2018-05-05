@@ -52,7 +52,6 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <mainClass>com.gikk.clock.MainApp</mainClass>
                             <executable>${java.home}/../bin/javapackager</executable>
                             <arguments>
                                 <argument>-createjar</argument>
@@ -79,6 +78,9 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <mainClass>com.gikk.clock.MainApp</mainClass>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

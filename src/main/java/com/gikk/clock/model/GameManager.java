@@ -114,13 +114,15 @@ public class GameManager {
         return Game.DAO.create(qr, project, title, system);
     }
 
-    public void flushCurrentGame(QueryRunner qr) throws Exception {
-        Game currentGame
-            = this.getCurrentGame()
-                .orElseThrow(() ->
-                    new Exception("Cannot flush current game. Game is missing")
-                );
-        Game.DAO.flush(qr, currentGame);
+    public void flushGame(QueryRunner qr, Game game) throws Exception {
+        Game.DAO.flush(qr, game);
+    }
+
+    public void editGame(QueryRunner qr, Game game, String title, String system, Long seconds) throws Exception {
+        game.setTitle(title);
+        game.setSystem(system);
+        game.setPlaytimeSeconds(seconds);
+        Game.DAO.flush(qr, game);
     }
 
     /********************************************************

@@ -125,9 +125,17 @@ public class Game {
         static void flush(QueryRunner qr, Game game) throws SQLException {
             String sql = "UPDATE "
                          + TABLE_NAME
-                         + " SET `playtime_seconds` = ?, `updated` = NOW()"
+                         + " SET"
+                         + " `title` = ?,"
+                         + " `system` = ?,"
+                         + " `playtime_seconds` = ?,"
+                         + " `updated` = NOW()"
                          + " WHERE `game_id` = ?";
-            qr.update(sql, game.getPlaytimeSeconds(), game.getGameID());
+            qr.update(sql,
+                      game.getTitle(),
+                      game.getSystem(),
+                      game.getPlaytimeSeconds(),
+                      game.getGameID());
         }
 
         static Long getPlaytimeForProject(QueryRunner qr, Project project) throws SQLException {

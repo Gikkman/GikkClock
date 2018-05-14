@@ -18,8 +18,10 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#onSetProject" text="Projects" />
-                  <MenuItem mnemonicParsing="false" onAction="#onSetGame" text="Games" />
+              <MenuItem mnemonicParsing="false" onAction="#onSetProject" text="Set Current Projects" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#onSetGame" text="Set Current Game" />
+                  <MenuItem mnemonicParsing="false" onAction="#onEditGame" text="Edit Current Game" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

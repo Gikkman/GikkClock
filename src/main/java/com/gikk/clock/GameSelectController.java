@@ -79,7 +79,7 @@ public class GameSelectController implements Initializable, WindowController {
             AlertWindow.showInfo(
                 stage,
                 "Missing game",
-                "You need to chose a game in the list.\n"
+                "You need to choose a game in the list.\n"
                 + "Can't remove something that doesn't exist, ya?");
             return;
         }
@@ -131,8 +131,8 @@ public class GameSelectController implements Initializable, WindowController {
             AlertWindow.showInfo(
                 stage,
                 "Missing game",
-                "You need to chose a game in the list.\n"
-                + "Can't chose something that doesn't exist, ya?");
+                "You need to choose a game in the list.\n"
+                + "Can't choose something that doesn't exist, ya?");
             return;
         }
 
@@ -173,7 +173,7 @@ public class GameSelectController implements Initializable, WindowController {
             Stage stage = (Stage) newTitle.getScene().getWindow();
             AlertWindow.showInfo(
                 stage,
-                "Missing infor",
+                "Missing info",
                 "You need to assign both a title and a system to the game.\n"
                 + "Believe me, it is easier for all of us that way.");
             return;

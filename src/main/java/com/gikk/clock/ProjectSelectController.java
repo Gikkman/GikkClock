@@ -63,7 +63,7 @@ public class ProjectSelectController implements Initializable, WindowController{
             AlertWindow.showInfo(
                 stage,
                 "Missing game",
-                "You need to chose a game in the list.\n"
+                "You need to choose a game in the list.\n"
                 + "Can't remove something that doesn't exist, ya?");
             return;
         }
@@ -118,8 +118,8 @@ public class ProjectSelectController implements Initializable, WindowController{
             AlertWindow.showInfo(
                 stage,
                 "Missing game",
-                "You need to chose a game in the list.\n"
-                + "Can't select remove something that doesn't exist, ya?");
+                "You need to choose a game in the list.\n"
+                + "Can't select something that doesn't exist, ya?");
             return;
         }
 

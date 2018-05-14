@@ -138,7 +138,7 @@ public class MainAppController implements Initializable {
      ********************************************************/
     @FXML
     private void onSetProject() {
-        openWindowAndWait("Project Select", "ProjectSelect.fxml");
+        openWindowAndWait("Set Current Project", "ProjectSelect.fxml");
     }
 
     /********************************************************
@@ -148,7 +148,7 @@ public class MainAppController implements Initializable {
     private void onSetGame() {
         Optional<Project> project = ProjectManager.INSTANCE().getCurrentProject();
         if(project.isPresent()) {
-            openWindowAndWait("Game Select", "GameSelect.fxml");
+            openWindowAndWait("Set Current Game", "GameSelect.fxml");
         }
         else {
             Stage stage = (Stage) buttonStart.getScene().getWindow();
@@ -156,7 +156,23 @@ public class MainAppController implements Initializable {
                 stage,
                 "No project selected!",
                 "You gotta select a project before you can select a game.\n"
-                + "Check out Edit -> Project in the menu above.");
+                + "Check out Edit -> Set Current Project in the menu above.");
+        }
+    }
+
+    @FXML
+    private void onEditGame() {
+        Optional<Game> game = GameManager.INSTANCE().getCurrentGame();
+        if(game.isPresent()) {
+            openWindowAndWait("Edit Current Game", "GameEdit.fxml");
+        }
+        else {
+            Stage stage = (Stage) buttonStart.getScene().getWindow();
+            AlertWindow.showInfo(
+                stage,
+                "No game selected!",
+                "You gotta select a game before you can edit it.\n"
+                + "Check out Edit -> Set Current Game in the menu above.");
         }
     }
 

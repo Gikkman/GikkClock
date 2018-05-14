@@ -51,7 +51,7 @@ public class Engine {
             // Update timers
             QueryRunner qr = MainApp.getDatabase().getQueryRunner();
             GameManager.INSTANCE().tickGamePlaytimer();
-            GameManager.INSTANCE().flushCurrentGame(qr);
+            GameManager.INSTANCE().flushGame(qr, currentGame.get());
         }
         catch (Exception ex) {
             AlertWindow.showException(

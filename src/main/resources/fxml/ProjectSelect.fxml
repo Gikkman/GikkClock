@@ -29,7 +29,7 @@
          </rowConstraints>
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="small-text" text="Name:" GridPane.rowIndex="6" />
-            <Label text="Chose existing project" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+            <Label text="Choose existing project" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
             <Label text="Create new project" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" />
             <AnchorPane GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                <children>
@@ -44,7 +44,7 @@
                <children>
                   <StackPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#onChoseExisting" text="Chose">
+                        <Button mnemonicParsing="false" onAction="#onChoseExisting" text="Choose">
                            <padding>
                               <Insets bottom="6.0" left="36.0" right="36.0" top="6.0" />
                            </padding>
@@ -65,7 +65,7 @@
             <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
             <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" />
             <TextField fx:id="textNewProject" onAction="#onCreateAndChose" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
-            <Button mnemonicParsing="false" onAction="#onCreateAndChose" text="Create &amp; Chose" GridPane.columnSpan="2147483647" GridPane.rowIndex="7">
+            <Button mnemonicParsing="false" onAction="#onCreateAndChose" text="Create &amp; Choose" GridPane.columnSpan="2147483647" GridPane.rowIndex="7">
                <padding>
                   <Insets bottom="6.0" left="24.0" right="24.0" top="6.0" />
                </padding>

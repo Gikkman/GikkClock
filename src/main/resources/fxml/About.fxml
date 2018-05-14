@@ -31,7 +31,7 @@
             <Label text="Because BlasphemousRoar neede a timer, and since he's an awesome dude, I though: &quot;Why the heck not?&quot;" textAlignment="CENTER" wrapText="true" />
             <VBox alignment="CENTER" spacing="12.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <children>
-                  <Label text="The program outputs a number of text files into the /fiels directory. These can, with advantage, be used in OBS as text sources." textAlignment="CENTER" wrapText="true" />
+                  <Label text="The program outputs a number of text files into the /files directory. These can, with advantage, be used in OBS as text sources." textAlignment="CENTER" wrapText="true" />
                   <Label text="Be aware that there might be a few moments of delay between the time you see in the program and the time displayed in OBS. This is normal, since OBS inspects the files once per second, and we write to the files about once per second too. The text in OBS might flash/disapear/stall sometimes too. This is due to race condition between us writing to the file, and OBS inspecting the file at the same time. It usually sorts itself out after a second or two." textAlignment="CENTER" wrapText="true" />
                </children>
             </VBox>
@@ -39,7 +39,7 @@
                <children>
                   <TextFlow textAlignment="CENTER">
                      <children>
-                        <Label text="Currently in version 0.1. Use this software at your own risk." textAlignment="CENTER" />
+                        <Label text="Currently in version 0.2. Use this software at your own risk." textAlignment="CENTER" />
                         <Label text="Should you be interested in the source code, it is availible at Github: " />
                         <Hyperlink focusTraversable="false" onAction="#onHyperlink" text="https://github.com/Gikkman/GikkClock" />
                      </children>

@@ -32,6 +32,10 @@ public class Engine {
         }
     }
 
+    public boolean isRunning() {
+        return this.future != null;
+    }
+
     private void tick() {
         try {
             Optional<Game> currentGame = GameManager.INSTANCE().getCurrentGame();

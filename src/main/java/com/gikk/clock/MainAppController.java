@@ -95,7 +95,7 @@ public class MainAppController implements Initializable {
                 stage,
                 "No project selected!",
                 "You gotta select a project before you can start the timers.\n"
-                + "Check out Edit -> Project in the menu above.");
+                + "Check out Edit -> Set Current Project in the menu above.");
             return;
         }
 
@@ -106,7 +106,7 @@ public class MainAppController implements Initializable {
                 stage,
                 "No game selected!",
                 "You gotta select a game before you can start the timers.\n"
-                + "Check out Edit -> Game in the menu above.");
+                + "Check out Edit -> Set Current Game in the menu above.");
             return;
         }
 
@@ -138,6 +138,17 @@ public class MainAppController implements Initializable {
      ********************************************************/
     @FXML
     private void onSetProject() {
+        Stage stage = (Stage) buttonStart.getScene().getWindow();
+
+        if(engine != null && engine.isRunning()) {
+            AlertWindow.showInfo(
+                stage,
+                "Timers are running!",
+                "Please don't edit stuff while timers are running. It creates "
+                + "a lot of side effects and I'm too lazy to solve them.");
+            return;
+        }
+
         openWindowAndWait("Set Current Project", "ProjectSelect.fxml");
     }
 
@@ -146,12 +157,22 @@ public class MainAppController implements Initializable {
      ********************************************************/
     @FXML
     private void onSetGame() {
+        Stage stage = (Stage) buttonStart.getScene().getWindow();
+
+        if(engine != null && engine.isRunning()) {
+            AlertWindow.showInfo(
+                stage,
+                "Timers are running!",
+                "Please don't edit stuff while timers are running. It creates "
+                + "a lot of side effects and I'm too lazy to solve them.");
+            return;
+        }
+
         Optional<Project> project = ProjectManager.INSTANCE().getCurrentProject();
         if(project.isPresent()) {
             openWindowAndWait("Set Current Game", "GameSelect.fxml");
         }
         else {
-            Stage stage = (Stage) buttonStart.getScene().getWindow();
             AlertWindow.showInfo(
                 stage,
                 "No project selected!",
@@ -162,12 +183,22 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void onEditGame() {
+        Stage stage = (Stage) buttonStart.getScene().getWindow();
+
+        if(engine != null && engine.isRunning()) {
+            AlertWindow.showInfo(
+                stage,
+                "Timers are running!",
+                "Please don't edit stuff while timers are running. It creates "
+                + "a lot of side effects and I'm too lazy to solve them.");
+            return;
+        }
+
         Optional<Game> game = GameManager.INSTANCE().getCurrentGame();
         if(game.isPresent()) {
             openWindowAndWait("Edit Current Game", "GameEdit.fxml");
         }
         else {
-            Stage stage = (Stage) buttonStart.getScene().getWindow();
             AlertWindow.showInfo(
                 stage,
                 "No game selected!",

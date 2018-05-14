@@ -2,15 +2,18 @@ package com.gikk.clock;
 
 import com.gikk.clock.model.Game;
 import com.gikk.clock.model.GameManager;
+import com.gikk.clock.types.IntRangeStringConverter;
 import com.gikk.clock.util.AlertWindow;
 import com.gikk.clock.util.TimeFormatter;
+import com.gikk.clock.util.WindowController;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.apache.commons.dbutils.QueryRunner;
 
 /**
@@ -18,7 +21,7 @@ import org.apache.commons.dbutils.QueryRunner;
  *
  * @author Gikkman
  */
-public class GameEditController implements Initializable {
+public class GameEditController implements Initializable, WindowController {
 
     @FXML private TextField title;
     @FXML private TextField system;
@@ -31,20 +34,22 @@ public class GameEditController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            String time = TimeFormatter.getHoursMinutesSeconds(game.getPlaytimeSeconds());
-            String[] segments = time.split(":");
-
-            text_hh.setText(segments[0]);
-            text_mm.setText(segments[1]);
-            text_ss.setText(segments[2]);
-
-            makeNumberFields(text_hh, "[0-9]*", "0");
-            makeNumberFields(text_mm, "[0-5][0-9]", "00");
-            makeNumberFields(text_ss, "[0-5][0-9]", "00");
-
             game = GameManager.INSTANCE()
                 .getCurrentGame()
                 .orElseThrow( () -> new Exception() );
+
+            title.setText(game.getTitle());
+            system.setText(game.getSystem());
+
+            String time = TimeFormatter.getHoursMinutesSeconds(game.getPlaytimeSeconds());
+            String[] segments = time.split(":");
+
+            StringConverter<Integer> minSecConverter = new IntRangeStringConverter(0, 59);
+            StringConverter<Integer> hourConverter = new IntRangeStringConverter(0, 9999);
+
+            text_ss.setTextFormatter(new TextFormatter<>(minSecConverter, Integer.valueOf(segments[2])));
+            text_mm.setTextFormatter(new TextFormatter<>(minSecConverter, Integer.valueOf(segments[1])));
+            text_hh.setTextFormatter(new TextFormatter<>(hourConverter, Integer.valueOf(segments[0])));
         }
         catch (Exception ex) {
             AlertWindow.showException(
@@ -57,7 +62,7 @@ public class GameEditController implements Initializable {
     }
 
     @FXML
-    void onApply(ActionEvent event) {
+    private void onApply() {
         Stage stage = (Stage) title.getScene().getWindow();
 
         if(title.getText().isEmpty() || system.getText().isEmpty()) {
@@ -103,7 +108,7 @@ public class GameEditController implements Initializable {
     }
 
     @FXML
-    void onCancel(ActionEvent event) {
+    private void onCancel() {
         Stage stage = (Stage) title.getScene().getWindow();
         stage.close();
     }

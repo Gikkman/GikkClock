@@ -39,7 +39,7 @@
                <children>
                   <TextFlow textAlignment="CENTER">
                      <children>
-                        <Label text="Currently in version 0.2. Use this software at your own risk." textAlignment="CENTER" />
+                         <Label text="Currently in version 0.3. Use this software at your own risk." textAlignment="CENTER" />
                         <Label text="Should you be interested in the source code, it is availible at Github: " />
                         <Hyperlink focusTraversable="false" onAction="#onHyperlink" text="https://github.com/Gikkman/GikkClock" />
                      </children>

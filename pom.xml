@@ -4,7 +4,7 @@
 
     <groupId>com.gikk</groupId>
     <artifactId>GikkClock</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
 
     <name>GikkClock</name>
@@ -110,7 +110,6 @@
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -124,7 +123,6 @@
             <version>1.7</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
 </project>

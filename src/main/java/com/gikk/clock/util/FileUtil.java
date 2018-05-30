@@ -15,7 +15,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableStringValue;
 
 public class FileUtil {
-    private static final Path STORE_DIR = Paths.get("").resolve("files/");
+    private static final Path STORE_DIR = Paths.get(MainApp.getLocation()).resolve("files/");
     private static final Map<ObservableStringValue, ChangeListener> SYNC_MAP = new ConcurrentHashMap<>();
 
     private static volatile Map<Path, String> flushQueue = new ConcurrentHashMap<>();

@@ -6,6 +6,8 @@ import com.gikk.clock.model.Project;
 import com.gikk.clock.model.ProjectManager;
 import com.gikk.clock.util.Database;
 import com.gikk.clock.util.Log;
+import com.gikk.clock.util.WindowUtil;
+import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -24,7 +26,7 @@ import static javafx.application.Application.*;
 
 
 public class MainApp extends Application {
-
+    private static String fileLocation;
     private static Window rootWindow;
     private static Database db;
     private static ScheduledExecutorService executor;
@@ -41,9 +43,16 @@ public class MainApp extends Application {
         stage.getIcons().add(new Image(MainApp.class.getResourceAsStream("/icon.png")));
         stage.setTitle("Gikk Clock");
         stage.setScene(scene);
+
+        WindowUtil.loadPosition(stage);
+
         stage.show();
 
         // On shutdown mechanics
+        stage.setOnHiding(e -> {
+            WindowUtil.savePosition(stage);
+        });
+
         stage.setOnHidden( (e) -> {
             Log.info("Shutting down");
             try {
@@ -60,6 +69,7 @@ public class MainApp extends Application {
             QueryRunner qr = db.getQueryRunner();
             ProjectManager.INSTANCE().finalize(qr);
             GameManager.INSTANCE().finalize(qr);
+            Database.shutdown();
 
             Log.info("Shutting completed");
         });
@@ -99,7 +109,18 @@ public class MainApp extends Application {
         }
     }
 
+    public static String getLocation() {
+        return fileLocation;
+    }
+
     private void initialize() throws Exception {
+        fileLocation = new File(
+                MainApp.class.getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI())
+            .getParent();
+
         this.db = new Database();
         this.executor = new ScheduledThreadPoolExecutor(1);
 

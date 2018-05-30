@@ -1,10 +1,12 @@
 package com.gikk.clock.util;
 
+import com.gikk.clock.MainApp;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbutils.QueryRunner;
 import org.h2.jdbcx.JdbcDataSource;
+import org.h2.tools.Server;
 
 /**
  *
@@ -13,10 +15,22 @@ import org.h2.jdbcx.JdbcDataSource;
 public class Database {
     private final static JdbcDataSource DATASOURCE = new JdbcDataSource();
     private final static Logger LOGGER = Logger.getLogger(Database.class.getName());
+    private static Server server;
     static{
-        DATASOURCE.setURL("jdbc:h2:./database;mode=MySQL");
-        DATASOURCE.setUser("user");
-        DATASOURCE.setPassword("");
+        try {
+            server = Server.createTcpServer("-baseDir", MainApp.getLocation()).start();
+            String url = server.getURL();
+            LOGGER.log(Level.INFO, "DB url: {0}", url);
+
+            DATASOURCE.setURL("jdbc:h2:" + url + "/database;MODE=MySQL");
+            DATASOURCE.setUser("user");
+            DATASOURCE.setPassword("");
+        }
+        catch (SQLException ex) {
+            LOGGER.log(Level.INFO, "Could not create server", ex);
+            System.exit(-1001);
+        }
+
 
         QueryRunner qr = new QueryRunner(DATASOURCE);
         try {
@@ -66,6 +80,10 @@ public class Database {
         catch (SQLException ex) {
             LOGGER.log(Level.INFO, "Database already exists", ex);
         }
+    }
+
+    public static void shutdown() {
+        server.stop();
     }
 
     public QueryRunner getQueryRunner(){

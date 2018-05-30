@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -91,8 +92,23 @@ public class WindowLoader<T extends WindowController>{
 
             stage.getIcons().add( owner.getIcons().get(0) );
 
-            stage.setOnShowing( (e) -> WindowUtil.loadPosition(stage));
-            stage.setOnHiding( (e) -> WindowUtil.savePosition(stage));
+            // Position popups relative to the main window
+            ChangeListener<Number> widthListener = (observable, oldValue, newValue) -> {
+                    double stageWidth = newValue.doubleValue();
+                    stage.setX(owner.getX() + owner.getWidth() / 2 - stageWidth / 2);
+            };
+            ChangeListener<Number> heightListener = (observable, oldValue, newValue) -> {
+                    double stageHeight = newValue.doubleValue();
+                    stage.setY(owner.getY() + owner.getHeight() / 2 - stageHeight / 2);
+            };
+            stage.widthProperty().addListener(widthListener);
+            stage.heightProperty().addListener(heightListener);
+
+            //Once the window is visible, remove the listeners
+            stage.setOnShown(e -> {
+                stage.widthProperty().removeListener(widthListener);
+                stage.heightProperty().removeListener(heightListener);
+            });
 
         } catch (Exception ex) {
             Log.error("Error loading window " + title, ex);

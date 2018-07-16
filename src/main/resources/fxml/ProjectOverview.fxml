@@ -35,10 +35,10 @@
          <children>
             <TableView fx:id="table">
               <columns>
-                  <TableColumn fx:id="colIndex" editable="false" prefWidth="75.0" text="Index" />
-                <TableColumn fx:id="colTitle" editable="false" prefWidth="75.0" text="Title" />
-                <TableColumn fx:id="colSystem" editable="false" prefWidth="75.0" text="System" />
-                  <TableColumn fx:id="colPlaytime" editable="false" prefWidth="75.0" text="Playtime" />
+                  <TableColumn fx:id="colIndex" editable="false" prefWidth="50.0" resizable="false" text="Index" />
+                <TableColumn fx:id="colTitle" editable="false" prefWidth="250.0" text="Title" />
+                <TableColumn fx:id="colSystem" editable="false" prefWidth="200.0" text="System" />
+                  <TableColumn fx:id="colPlaytime" editable="false" prefWidth="100.0" resizable="false" text="Playtime" />
               </columns>
             </TableView>
          </children>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gikk.clock.ProjectOverviewController">
+   <top>
+      <GridPane BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label text="Choose project" GridPane.columnSpan="2147483647" />
+            <ComboBox fx:id="comboboxProject" prefHeight="25.0" prefWidth="285.0" GridPane.rowIndex="1" />
+         </children>
+         <padding>
+            <Insets bottom="12.0" top="12.0" />
+         </padding>
+      </GridPane>
+   </top>
+   <center>
+      <VBox>
+         <children>
+            <TableView fx:id="table">
+              <columns>
+                  <TableColumn fx:id="colIndex" editable="false" prefWidth="75.0" text="Index" />
+                <TableColumn fx:id="colTitle" editable="false" prefWidth="75.0" text="Title" />
+                <TableColumn fx:id="colSystem" editable="false" prefWidth="75.0" text="System" />
+                  <TableColumn fx:id="colPlaytime" editable="false" prefWidth="75.0" text="Playtime" />
+              </columns>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

@@ -1,10 +1,15 @@
 package com.gikk.clock.model;
 
+import com.gikk.clock.util.TimeFormatter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -77,6 +82,25 @@ public class Game {
     void addPlaytimeSeconds(Long toAdd) {
         this.playtimeSeconds += toAdd;
     }
+    
+    /********************************************************
+     * PROPERTIES
+     ********************************************************/
+    public IntegerProperty indexProperty() {
+        return new SimpleIntegerProperty(gameID);
+    }
+    
+    public StringProperty titleProperty() {
+        return new SimpleStringProperty(title);
+    }
+    
+    public StringProperty systemProperty() {
+        return new SimpleStringProperty(system);
+    }
+    
+    public StringProperty playtimeProperty() {
+        return new SimpleStringProperty(TimeFormatter.getHoursMinutesSeconds(playtimeSeconds));
+    }    
 
     /********************************************************
      * OVERRIDE

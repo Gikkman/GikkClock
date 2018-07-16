@@ -151,6 +151,11 @@ public class MainAppController implements Initializable {
 
         openWindowAndWait("Set Current Project", "ProjectSelect.fxml");
     }
+    
+    @FXML 
+    private void onProjectOverview() {
+        openWindowAndWait("Project Overview", "ProjectOverview.fxml");
+    }
 
     /********************************************************
      * GAME
@@ -239,7 +244,7 @@ public class MainAppController implements Initializable {
                 stage,
                 "Error!",
                 "Window creation error"
-                + "Please screenshot this message and send to Gikk",
+                + " Please screenshot this message and send to Gikk",
                 ex);
         }
     }

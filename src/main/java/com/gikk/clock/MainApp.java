@@ -53,29 +53,31 @@ public class MainApp extends Application {
             WindowUtil.savePosition(stage);
         });
 
-        stage.setOnHidden( (e) -> {
-            Log.info("Shutting down");
-            try {
-                executor.shutdown();
-                    executor.awaitTermination(10, TimeUnit.SECONDS);
-                if(!executor.isTerminated()) {
-                    executor.shutdownNow();
-                }
-            }
-            catch (InterruptedException ex) {
-                Log.error("Shutting down executor failed", ex);
-            }
-
-            QueryRunner qr = db.getQueryRunner();
-            ProjectManager.INSTANCE().finalize(qr);
-            GameManager.INSTANCE().finalize(qr);
-            Database.shutdown();
-
-            Log.info("Shutting completed");
-        });
-
         this.rootWindow = stage;
     }
+    
+    @Override
+    public void stop() {
+        Log.info("Shutting down");
+        try {
+            executor.shutdown();
+                executor.awaitTermination(10, TimeUnit.SECONDS);
+            if(!executor.isTerminated()) {
+                executor.shutdownNow();
+            }
+        }
+        catch (InterruptedException ex) {
+            Log.error("Shutting down executor failed", ex);
+        }
+
+        QueryRunner qr = db.getQueryRunner();
+        ProjectManager.INSTANCE().finalize(qr);
+        GameManager.INSTANCE().finalize(qr);
+        Database.shutdown();
+
+        Log.info("Shutting completed");
+    }
+    
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.

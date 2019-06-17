@@ -2,6 +2,7 @@ package com.gikk.clock.model;
 
 import com.gikk.clock.types.ChangeListener;
 import com.gikk.clock.types.Observable;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.dbutils.QueryRunner;
@@ -118,10 +119,11 @@ public class GameManager {
         Game.DAO.flush(qr, game);
     }
 
-    public void editGame(QueryRunner qr, Game game, String title, String system, Long seconds) throws Exception {
+    public void editGame(QueryRunner qr, Game game, String title, String system, Long seconds, Boolean completed) throws Exception {
         game.setTitle(title);
         game.setSystem(system);
         game.setPlaytimeSeconds(seconds);
+        game.setCompleted(completed);
         Game.DAO.flush(qr, game);
     }
 

@@ -36,6 +36,8 @@ public class MainAppController implements Initializable {
     @FXML private Label labelGameSystem;
     @FXML private Label labeProjectTimer;
     @FXML private Label labelGameTimer;
+    @FXML private Label labelComplete;
+    
 
     private Engine engine;
 
@@ -62,6 +64,7 @@ public class MainAppController implements Initializable {
             MainApp.runFx( () -> {
                 labelGameTitle.setText( g == null ? "" : g.getTitle() );
                 labelGameSystem.setText( g == null ? "" : g.getSystem() );
+                labelComplete.setText((g == null || !g.getCompleted()) ? "" : "COMPLETED");
             });
         });
         // Bind game timer

@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -100,14 +101,28 @@ public class MainAppController implements Initializable {
         }
 
         Optional<Game> game = GameManager.INSTANCE().getCurrentGame();
+        Stage stage = (Stage) buttonStart.getScene().getWindow();
         if(!game.isPresent()) {
-            Stage stage = (Stage) buttonStart.getScene().getWindow();
             AlertWindow.showInfo(
                 stage,
                 "No game selected!",
                 "You gotta select a game before you can start the timers.\n"
                 + "Check out Edit -> Set Current Game in the menu above.");
             return;
+        }
+        if(game.get().getCompleted()) {
+            boolean ok = AlertWindow.showConfirm(
+                    stage, 
+                    "Game State Warning", 
+                    "Game is completed", 
+                    "Are you sure you want to start the timer for a completed"
+                + " game? You can, but it is kinda silly.\n"
+                + "(You can also un-complete the game by going to"
+                + " Edit -> Edit Current Game)")
+            .map(bt -> bt.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+            .orElse(false);
+            if(!ok) 
+                return;
         }
 
         engine = new Engine(game.get());

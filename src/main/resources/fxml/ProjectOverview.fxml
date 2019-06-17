@@ -12,8 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gikk.clock.ProjectOverviewController">
+<BorderPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gikk.clock.ProjectOverviewController">
    <top>
       <GridPane fx:id="pane" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -35,21 +36,22 @@
    <center>
       <VBox>
          <children>
-            <GridPane>
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="ALWAYS" />
                   <RowConstraints vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <TableView fx:id="table">
+                  <TableView fx:id="table" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <columns>
-                        <TableColumn fx:id="colIndex" editable="false" prefWidth="50.0" resizable="false" text="Index" />
-                      <TableColumn fx:id="colTitle" editable="false" prefWidth="250.0" text="Title" />
-                      <TableColumn fx:id="colSystem" editable="false" prefWidth="200.0" text="System" />
-                        <TableColumn fx:id="colPlaytime" editable="false" prefWidth="100.0" resizable="false" text="Playtime" />
+                        <TableColumn fx:id="colIndex" editable="false" maxWidth="40.0" prefWidth="40.0" resizable="false" text="#" />
+                        <TableColumn fx:id="colDone" maxWidth="40.0" prefWidth="40.0" resizable="false" text="Done" />
+                      <TableColumn fx:id="colTitle" editable="false" maxWidth="1.7976931348623157E308" prefWidth="368.0" text="Title" />
+                      <TableColumn fx:id="colSystem" editable="false" maxWidth="1.7976931348623157E308" prefWidth="250.0" text="System" />
+                        <TableColumn fx:id="colPlaytime" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" text="Playtime" />
                     </columns>
                   </TableView>
                   <GridPane hgap="16.0" GridPane.rowIndex="1">
@@ -60,11 +62,12 @@
                       <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints prefHeight="25.0" vgrow="SOMETIMES" />
-                      <RowConstraints prefHeight="25.0" vgrow="SOMETIMES" />
-                      <RowConstraints prefHeight="25.0" vgrow="SOMETIMES" />
-                        <RowConstraints prefHeight="25.0" vgrow="SOMETIMES" />
-                        <RowConstraints prefHeight="25.0" vgrow="SOMETIMES" />
+                      <RowConstraints prefHeight="20.0" vgrow="SOMETIMES" />
+                      <RowConstraints prefHeight="20.0" vgrow="SOMETIMES" />
+                      <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="20.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="Game Count" />
@@ -81,6 +84,13 @@
                         <Label fx:id="lbl_mediantime" text="0:00:00" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                         <Label fx:id="lbl_longesttime" text="0:00:00" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                         <Label fx:id="lbl_shortesttime" text="0:00:00" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <Label text="Complete Count" GridPane.rowIndex="1" />
+                        <Label fx:id="lbl_completecount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Calculated stats only consider completed games" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Label>
                      </children>
                   </GridPane>
                </children>
@@ -98,7 +108,7 @@
             </Button>
          </children>
          <padding>
-            <Insets bottom="16.0" top="16.0" />
+            <Insets bottom="16.0" top="8.0" />
          </padding>
       </HBox>
    </bottom>

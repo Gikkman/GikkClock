@@ -20,7 +20,7 @@ public class Database {
     static{
         try {
             server = Server.createTcpServer("-baseDir", MainApp.getLocation()).start();
-            String url = "localhost:" + server.getPort();
+            String url = "tcp://localhost:" + server.getPort();
             LOGGER.log(Level.INFO, "DB url: {0}", url);
 
             DATASOURCE.setURL("jdbc:h2:" + url + "/database;MODE=MySQL");
@@ -42,17 +42,28 @@ public class Database {
             System.exit(1);
         }
 
-        try {            
+        try {   
+            // Initial setup
+            qr.execute("CREATE SCHEMA IF NOT EXISTS `timers`");
+
+            qr.execute(
+                  "CREATE TABLE IF NOT EXISTS `timers`.`config` ("
+                + " `key` VARCHAR(50) NOT NULL,"
+                + " `value` VARCHAR(50),"
+                + "PRIMARY KEY (`key`));"
+            );
+            
+            // Up versions
             boolean up = true;
             while(up)
-            switch(ConfigManager.getConfigOrDefault(qr, "db_version", 0)) {
-                case 0:
+            switch(ConfigManager.getConfigOrDefault(qr, "db_version", "0")) {
+                case "0":
                     System.out.println("Up database from 0 -> 1");
                     upDatabaseTo1(qr);
                     ConfigManager.putConfig(qr, "db_version", "1");
                     System.out.println("Upped database from 0 -> 1");
                     break;
-                case 1:
+                case "1":
                     System.out.println("Up database from 1 -> 2");
                     upDatebaseTo2(qr);
                     ConfigManager.putConfig(qr, "db_version", "2");
@@ -76,15 +87,6 @@ public class Database {
     }
 
     private static void upDatabaseTo1(QueryRunner qr) throws SQLException {
-        qr.execute("CREATE SCHEMA IF NOT EXISTS `timers`");
-
-        qr.execute(
-              "CREATE TABLE IF NOT EXISTS `timers`.`config` ("
-            + " `key` VARCHAR(50) NOT NULL,"
-            + " `value` VARCHAR(50),"
-            + "PRIMARY KEY (`key`));"
-        );
-
         qr.execute(
               "CREATE TABLE IF NOT EXISTS `timers`.`project` ("
             + " `project_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,"

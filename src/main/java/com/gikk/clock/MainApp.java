@@ -13,6 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
+import static javafx.application.Application.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,8 +22,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.apache.commons.dbutils.QueryRunner;
-
-import static javafx.application.Application.*;
 
 
 public class MainApp extends Application {
@@ -61,7 +60,7 @@ public class MainApp extends Application {
         Log.info("Shutting down");
         try {
             executor.shutdown();
-                executor.awaitTermination(10, TimeUnit.SECONDS);
+            executor.awaitTermination(10, TimeUnit.SECONDS);
             if(!executor.isTerminated()) {
                 executor.shutdownNow();
             }

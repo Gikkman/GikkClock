@@ -58,6 +58,8 @@ public class ProjectOverviewController implements Initializable, WindowControlle
     
     @FXML private GridPane pane;
     
+    private List<Game> currentProjectGames;
+    
     /**
      * Initializes the controller class.
      */
@@ -110,12 +112,12 @@ public class ProjectOverviewController implements Initializable, WindowControlle
     
     private void onNewProject(Project p) {
         try {
-           QueryRunner qr = MainApp.getDatabase().getQueryRunner();
-            List<Game> games = GameManager.INSTANCE().getAllForProject(qr, p);
+            QueryRunner qr = MainApp.getDatabase().getQueryRunner();
+            currentProjectGames = GameManager.INSTANCE().getAllForProject(qr, p);
             List<GameWrapper> wrapped = new ArrayList<>();
             
-            for(int i = 0; i < games.size(); i++) {
-                Game game = games.get(i);
+            for(int i = 0; i < currentProjectGames.size(); i++) {
+                Game game = currentProjectGames.get(i);
                 // i+1 for nice display indexes
                 GameWrapper w= new GameWrapper(i+1, game.getCompleted(),
                         game.getTitle(), game.getSystem(), 
@@ -125,54 +127,7 @@ public class ProjectOverviewController implements Initializable, WindowControlle
             gameList.clear();
             gameList.addAll(wrapped);
             
-            // Game count
-            lbl_gamecount.setText( String.valueOf(games.size()) );
-
-            // Only work with complted games for calculating stats
-            List<Game> completedGames = games.stream().filter(Game::getCompleted).collect(Collectors.toList());
-            lbl_completecount.setText( String.valueOf(completedGames.size()) );
-            
-            if(completedGames.size() > 0) {
-                // Calculate median lenght
-                completedGames.sort( (left, right) -> {
-                    return Math.toIntExact(left.getPlaytimeSeconds() - right.getPlaytimeSeconds());
-                });
-                int middle = completedGames.size() / 2;
-                int lowerIndex, upperIndex;
-                if(completedGames.size() % 2 == 1) {
-                    lowerIndex = upperIndex = middle;
-                }
-                else {
-                    lowerIndex = middle - 1;
-                    upperIndex = middle;
-                }
-                Game lowerGame = completedGames.get(lowerIndex);
-                Game upperGame = completedGames.get(upperIndex);
-                long medianSeconds =  (lowerGame.getPlaytimeSeconds() + upperGame.getPlaytimeSeconds()) / 2;
-                lbl_mediantime.setText( TimeFormatter.getHoursMinutesSeconds(medianSeconds));
-
-                // Calculate mean lengt
-                long meanTime = completedGames.stream().mapToLong(Game::getPlaytimeSeconds).sum() / completedGames.size();
-                lbl_meantime.setText( TimeFormatter.getHoursMinutesSeconds(meanTime));
-
-                //Find longest game
-                Game longestGame = completedGames.get( completedGames.size() - 1);
-                lbl_longesttitle.setText( longestGame.getTitle());
-                lbl_longesttime.setText( TimeFormatter.getHoursMinutesSeconds( longestGame.getPlaytimeSeconds()));
-
-                //Find shortest game
-                Game shortestGame = completedGames.get( 0 );
-                lbl_shortesttitle.setText( shortestGame.getTitle());
-                lbl_shortesttime.setText( TimeFormatter.getHoursMinutesSeconds( shortestGame.getPlaytimeSeconds()));
-            }
-            else {
-                lbl_mediantime.setText("0:00:00");
-                lbl_meantime.setText("0:00:00");
-                lbl_longesttime.setText("0:00:00");
-                lbl_shortesttime.setText("0:00:00");
-                lbl_longesttitle.setText("");
-                lbl_shortesttitle.setText("");
-            }
+            calculateProjectStats(currentProjectGames);
         } catch (Exception ex) {
             AlertWindow.showException(
             null,
@@ -181,6 +136,57 @@ public class ProjectOverviewController implements Initializable, WindowControlle
             + "Please screenshot this message and send to Gikk",
             ex);
         } 
+    }
+    
+    private void calculateProjectStats(List<Game> games) {
+        // Game count
+        lbl_gamecount.setText( String.valueOf(games.size()) );
+
+        // Only work with complted games for calculating stats
+        List<Game> completedGames = games.stream().filter(Game::getCompleted).collect(Collectors.toList());
+        lbl_completecount.setText( String.valueOf(completedGames.size()) );
+
+        if(completedGames.size() > 0) {
+            // Calculate median lenght
+            completedGames.sort( (left, right) -> {
+                return Math.toIntExact(left.getPlaytimeSeconds() - right.getPlaytimeSeconds());
+            });
+            int middle = completedGames.size() / 2;
+            int lowerIndex, upperIndex;
+            if(completedGames.size() % 2 == 1) {
+                lowerIndex = upperIndex = middle;
+            }
+            else {
+                lowerIndex = middle - 1;
+                upperIndex = middle;
+            }
+            Game lowerGame = completedGames.get(lowerIndex);
+            Game upperGame = completedGames.get(upperIndex);
+            long medianSeconds =  (lowerGame.getPlaytimeSeconds() + upperGame.getPlaytimeSeconds()) / 2;
+            lbl_mediantime.setText( TimeFormatter.getHoursMinutesSeconds(medianSeconds));
+
+            // Calculate mean lengt
+            long meanTime = completedGames.stream().mapToLong(Game::getPlaytimeSeconds).sum() / completedGames.size();
+            lbl_meantime.setText( TimeFormatter.getHoursMinutesSeconds(meanTime));
+
+            //Find longest game
+            Game longestGame = completedGames.get( completedGames.size() - 1);
+            lbl_longesttitle.setText( longestGame.getTitle());
+            lbl_longesttime.setText( TimeFormatter.getHoursMinutesSeconds( longestGame.getPlaytimeSeconds()));
+
+            //Find shortest game
+            Game shortestGame = completedGames.get( 0 );
+            lbl_shortesttitle.setText( shortestGame.getTitle());
+            lbl_shortesttime.setText( TimeFormatter.getHoursMinutesSeconds( shortestGame.getPlaytimeSeconds()));
+        }
+        else {
+            lbl_mediantime.setText("0:00:00");
+            lbl_meantime.setText("0:00:00");
+            lbl_longesttime.setText("0:00:00");
+            lbl_shortesttime.setText("0:00:00");
+            lbl_longesttitle.setText("");
+            lbl_shortesttitle.setText("");
+        }
     }
     
     public static class GameWrapper {

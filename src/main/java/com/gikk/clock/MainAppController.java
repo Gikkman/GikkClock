@@ -16,6 +16,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -28,6 +30,8 @@ public class MainAppController implements Initializable {
     /********************************************************
      * VARIABLES
      ********************************************************/
+    
+    private final StringProperty completeCount = new SimpleStringProperty("0");
 
     @FXML private Button buttonStart;
 
@@ -59,6 +63,12 @@ public class MainAppController implements Initializable {
                 labeProjectTimer. setText(TimeFormatter.getHoursMinutesSeconds(t));
             });
         });
+        // Bind project complete count
+        ProjectManager.INSTANCE().addProjectCompleteCountListener( (t) -> {
+            MainApp.runFx( () -> {
+                completeCount.set(String.valueOf(t));
+            });
+        });
         // Bind game title and system
         GameManager.INSTANCE().addGameListener( (g) -> {
             MainApp.runFx( () -> {
@@ -81,6 +91,7 @@ public class MainAppController implements Initializable {
 
         FileUtil.sync("project_name.txt", labelProjectName.textProperty());
         FileUtil.sync("project_timer.txt", labeProjectTimer.textProperty());
+        FileUtil.sync("project_complete_count.txt", completeCount);
 
         // Set button action
         buttonStart.setOnAction(e -> onStart());

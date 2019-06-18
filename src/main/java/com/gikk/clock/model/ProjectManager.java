@@ -16,6 +16,7 @@ public class ProjectManager {
      ********************************************************/
     private final Observable<Project> project = new Observable<>(null);
     private final Observable<Long> projectPlaytime = new Observable<>(0L);
+    private final Observable<Long> projectCompleteCount = new Observable<>(0L);
 
     private ProjectManager() {}
 
@@ -55,6 +56,10 @@ public class ProjectManager {
 
     void tickProjectPlaytime() {
         this.projectPlaytime.update( this.projectPlaytime.read() + 1L );
+    }
+    
+    public void addProjectCompleteCountListener(ChangeListener<Long> l) {
+        this.projectCompleteCount.addListener(l);
     }
 
     /********************************************************

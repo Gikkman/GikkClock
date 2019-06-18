@@ -2,7 +2,6 @@ package com.gikk.clock.model;
 
 import com.gikk.clock.types.ChangeListener;
 import com.gikk.clock.types.Observable;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.dbutils.QueryRunner;
@@ -41,8 +40,6 @@ public class GameManager {
     public void addGameListener(ChangeListener<Game> l) {
         this.game.addListener(l);
     }
-
-
 
     public void addGamePlaytimeListener(ChangeListener<Long> l) {
         this.gameTime.addListener(l);

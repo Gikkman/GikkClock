@@ -130,7 +130,7 @@ public class ProjectSelectController implements Initializable, WindowController{
             ProjectManager.INSTANCE().setProject(project);
 
             // Update the project timer
-            GameManager.INSTANCE().updateProjectPlaytime(qr, project);
+            GameManager.INSTANCE().updateProjectExportedStatistics(qr, project);
 
             // If the currently set game was of another project than the one we
             // just chose, unset it
@@ -178,7 +178,7 @@ public class ProjectSelectController implements Initializable, WindowController{
             GameManager.INSTANCE().unsetGame();
 
             // Update the project timer
-            GameManager.INSTANCE().updateProjectPlaytime(qr, project);
+            GameManager.INSTANCE().updateProjectExportedStatistics(qr, project);
 
             // Close window
             stage.close();

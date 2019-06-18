@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -27,6 +29,7 @@ public class Game {
     private String title;
     private String system;
     private Long playtimeSeconds;
+    private Boolean completed;
 
     /********************************************************
      * PUBLIC
@@ -83,6 +86,14 @@ public class Game {
         this.playtimeSeconds += toAdd;
     }
     
+    void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+    
+    public Boolean getCompleted() {
+        return this.completed;
+    }
+    
     /********************************************************
      * PROPERTIES
      ********************************************************/
@@ -100,7 +111,11 @@ public class Game {
     
     public StringProperty playtimeProperty() {
         return new SimpleStringProperty(TimeFormatter.getHoursMinutesSeconds(playtimeSeconds));
-    }    
+    }   
+    
+    public BooleanProperty completedProperty() {
+        return new SimpleBooleanProperty(completed);
+    } 
 
     /********************************************************
      * OVERRIDE
@@ -143,6 +158,7 @@ public class Game {
             game.setSystem(system);
             game.setTitle(title);
             game.setPlaytimeSeconds(0L);
+            game.setCompleted(Boolean.FALSE);
             return game;
         }
 
@@ -153,12 +169,14 @@ public class Game {
                          + " `title` = ?,"
                          + " `system` = ?,"
                          + " `playtime_seconds` = ?,"
+                         + " `completed` = ?,"
                          + " `updated` = NOW()"
                          + " WHERE `game_id` = ?";
             qr.update(sql,
                       game.getTitle(),
                       game.getSystem(),
                       game.getPlaytimeSeconds(),
+                      game.getCompleted(),
                       game.getGameID());
         }
 
@@ -170,11 +188,21 @@ public class Game {
                          + " WHERE `project_id` = ?";
             return qr.query(sql, sh, project.getProjectID());
         }
+        
+        static Long getCompletedCountForProject(QueryRunner qr, Project project) throws SQLException {
+            ScalarHandler<Long> sh = new ScalarHandler<>();
+            String sql = "SELECT"
+                    + " COUNT(*)"
+                    + " FROM " + TABLE_NAME
+                    + " WHERE `project_id` = ?"
+                    + " AND `completed` = 1";
+            return qr.query(sql, sh, project.getProjectID());        
+        }
 
         static List<Game> getAllForProject(QueryRunner qr, Project project) throws SQLException {
             MapListHandler mlh = new MapListHandler();
             String sql = "SELECT"
-                         + " `game_id`, `title`, `system`,"
+                         + " `game_id`, `title`, `system`, `completed`,"
                          + " SUM(`playtime_seconds`) as playtime_seconds"
                          + " FROM " + TABLE_NAME
                          + " WHERE `project_id` = ?"
@@ -189,6 +217,7 @@ public class Game {
                 game.setSystem((String) row.get("system"));
                 game.setTitle((String) row.get("title"));
                 game.setPlaytimeSeconds((Long) row.get("playtime_seconds"));
+                game.setCompleted(((Integer) row.get("completed")) == 1);
                 output.add(game);
             }
             return output;

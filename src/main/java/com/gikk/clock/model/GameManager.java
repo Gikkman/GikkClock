@@ -41,8 +41,6 @@ public class GameManager {
         this.game.addListener(l);
     }
 
-
-
     public void addGamePlaytimeListener(ChangeListener<Long> l) {
         this.gameTime.addListener(l);
     }
@@ -76,13 +74,11 @@ public class GameManager {
                                 .filter(p -> game.getProject().equals(p))
                                 .isPresent();
         if(sameProject) {
-            Long projectPlaytime = Game.DAO.getPlaytimeForProject(qr, game.getProject());
-            ProjectManager.INSTANCE().setProjectPlaytime(projectPlaytime);
+            updateProjectExportedStatistics(qr, game.getProject());
         }
     }
 
-    /**Update the current project time, but only if the parameter game
-     * is of the same project as the currently selected project.
+    /**Update the current project play time, and complete count observables.
      * <p>
      * I know it is a bit strange to let this logic reside here, but I
      * wanted to isolate the knowledge of the Game table from the Project class.
@@ -92,10 +88,12 @@ public class GameManager {
      * @param game
      * @throws Exception
      */
-    public void updateProjectPlaytime(QueryRunner qr, Project project) throws Exception {
+    public void updateProjectExportedStatistics(QueryRunner qr, Project project) throws Exception {
         Long projectPlaytime = Game.DAO.getPlaytimeForProject(qr, project);
         ProjectManager.INSTANCE().setProjectPlaytime(projectPlaytime);
 
+        Long projectCompleteCount = Game.DAO.getCompletedCountForProject(qr, project);
+        ProjectManager.INSTANCE().setProjectCompleteCount(projectCompleteCount);
     }
 
     /********************************************************
@@ -118,10 +116,11 @@ public class GameManager {
         Game.DAO.flush(qr, game);
     }
 
-    public void editGame(QueryRunner qr, Game game, String title, String system, Long seconds) throws Exception {
+    public void editGame(QueryRunner qr, Game game, String title, String system, Long seconds, Boolean completed) throws Exception {
         game.setTitle(title);
         game.setSystem(system);
         game.setPlaytimeSeconds(seconds);
+        game.setCompleted(completed);
         Game.DAO.flush(qr, game);
     }
 

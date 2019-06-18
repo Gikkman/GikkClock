@@ -6,7 +6,6 @@ import java.io.StringWriter;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -35,7 +34,7 @@ public class AlertWindow {
     }
 
     public static void showException(Stage owner, String title, String header, Exception ex){
-        Platform.runLater( () -> {
+        MainApp.runFx( () -> {
             Alert alert = formatAlert(AlertType.ERROR, owner, title, header, "An error occured. Please see the StackTrace bellow");
 
             // Create expandable Exception.
@@ -70,7 +69,7 @@ public class AlertWindow {
     public static Optional<ButtonType> showConfirm(Stage owner, String title, String header, String message ){
         CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
 
-        Platform.runLater( () -> {
+        MainApp.runFx(() -> {
             Alert alert = formatAlert(AlertType.CONFIRMATION, owner, title, header, message);
             future.complete( alert.showAndWait() );
         });
@@ -82,7 +81,7 @@ public class AlertWindow {
     }
 
     private static void simpleAlert(AlertType type, Stage owner, String title, String message){
-        Platform.runLater( () -> {
+        MainApp.runFx( () -> {
             Alert alert = formatAlert(type, owner, title, null, message);
             alert.showAndWait();
         });

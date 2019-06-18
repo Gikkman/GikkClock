@@ -8,12 +8,13 @@ import com.gikk.clock.util.AlertWindow;
 import com.gikk.clock.util.WindowController;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -32,6 +33,7 @@ public class GameSelectController implements Initializable, WindowController {
 
     @FXML private ComboBox<Game> comboboxPickExisting;
 
+    @FXML private CheckBox hideCompleted;
     @FXML private TextField newTitle;
     @FXML private TextField newSystem;
 
@@ -45,20 +47,15 @@ public class GameSelectController implements Initializable, WindowController {
                         .getCurrentProject()
                         .orElseThrow(() -> new Exception("No project set"));
 
+            // Only show non-completed games in the list of selectables by default
             QueryRunner qr = MainApp.getDatabase().getQueryRunner();
-            List<Game> games = GameManager.INSTANCE().getAllForProject(qr, project);
-
-            gameList.addAll(games);
-            comboboxPickExisting.setItems(gameList);
-
-            // Set the choice to either the current, or the last of the list
-            Optional<Game> currentGame = GameManager.INSTANCE().getCurrentGame();
-            if(currentGame.isPresent() && gameList.size() > 0) {
-                comboboxPickExisting.setValue(currentGame.get());
-            }
-            else if(gameList.size() > 0) {
-                comboboxPickExisting.setValue(gameList.get( gameList.size() - 1));
-            }
+            List<Game> games = GameManager.INSTANCE()
+                    .getAllForProject(qr, project)
+                    .stream()
+                    .filter(game -> !game.getCompleted())
+                    .collect(Collectors.toList());
+            Game currentGame = GameManager.INSTANCE().getCurrentGame().orElse(null);
+            internalUpdateGamesList(games, currentGame);
         }
         catch (Exception ex) {
             AlertWindow.showException(
@@ -67,6 +64,46 @@ public class GameSelectController implements Initializable, WindowController {
                 "Window creation failed. "
                 + "Please screenshot this message and send to Gikk",
                 ex);
+        }
+    }
+    
+    @FXML
+    private void onToggleHideCompleted() {
+        try {
+            boolean hide = hideCompleted.isSelected();
+            QueryRunner qr = MainApp.getDatabase().getQueryRunner();
+            List<Game> games = GameManager.INSTANCE()
+                    .getAllForProject(qr, project)
+                    .stream()
+                    .filter(game -> hide ? !game.getCompleted() : true)
+                    .collect(Collectors.toList());
+            Game selectedGame = comboboxPickExisting.getValue();
+            internalUpdateGamesList(games, selectedGame);
+        }
+        catch (Exception ex) {
+            AlertWindow.showException(
+                null,
+                "Error!",
+                "Game list update failed. "
+                + "Please screenshot this message and send to Gikk",
+                ex);
+        }
+    }
+    
+    private void internalUpdateGamesList(List<Game> availibleGames, Game currentySelected) {
+        gameList.clear();
+        gameList.addAll(availibleGames);
+        comboboxPickExisting.setItems(gameList);
+
+        // Set the choice to either the selected, or the last of the list
+        if(currentySelected != null && gameList.size() > 0 && gameList.contains(currentySelected)) {
+            comboboxPickExisting.setValue(currentySelected);
+        }
+        else if(gameList.size() > 0) {
+            comboboxPickExisting.setValue(gameList.get( gameList.size() - 1));
+        }
+        else {
+            comboboxPickExisting.getSelectionModel().clearSelection();
         }
     }
 

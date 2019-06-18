@@ -13,24 +13,24 @@ import org.apache.commons.dbutils.ResultSetHandler;
 public class ConfigManager {
     private static final String TABLE_NAME = "`timers`.`config`";
 
-    public static <T> T getConfigOrDefault(QueryRunner qr, String key, T defaultValue) {
-        ResultSetHandler<T> rsh = new BaseResultSetHandler<T>() {
+    public static String getConfigOrDefault(QueryRunner qr, String key, String defaultValue) {
+        ResultSetHandler<String> rsh = new BaseResultSetHandler<String>() {
             @Override
-            protected T handle() throws SQLException {
+            protected String handle() throws SQLException {
                 if(!next()) {
                     return null;
                 }
                 else {
-                    Object obj = getObject(1);
+                    String obj = getString(1);
                     if(obj == null) {
                         return null;
                     }
-                    return (T) obj;
+                    return obj;
                 }
             }
         };
         try{
-            T val = qr.query("SELECT `value` FROM " + TABLE_NAME + " WHERE `key` = ?" , rsh, key);
+            String val = qr.query("SELECT `value` FROM " + TABLE_NAME + " WHERE `key` = ?" , rsh, key);
             if(val == null) {
                 return defaultValue;
             }

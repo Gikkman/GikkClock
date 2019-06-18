@@ -16,9 +16,12 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,6 +30,8 @@ public class MainAppController implements Initializable {
     /********************************************************
      * VARIABLES
      ********************************************************/
+    
+    private final StringProperty completeCount = new SimpleStringProperty("0");
 
     @FXML private Button buttonStart;
 
@@ -35,6 +40,8 @@ public class MainAppController implements Initializable {
     @FXML private Label labelGameSystem;
     @FXML private Label labeProjectTimer;
     @FXML private Label labelGameTimer;
+    @FXML private Label labelComplete;
+    
 
     private Engine engine;
 
@@ -56,11 +63,18 @@ public class MainAppController implements Initializable {
                 labeProjectTimer. setText(TimeFormatter.getHoursMinutesSeconds(t));
             });
         });
+        // Bind project complete count
+        ProjectManager.INSTANCE().addProjectCompleteCountListener( (t) -> {
+            MainApp.runFx( () -> {
+                completeCount.set(String.valueOf(t));
+            });
+        });
         // Bind game title and system
         GameManager.INSTANCE().addGameListener( (g) -> {
             MainApp.runFx( () -> {
                 labelGameTitle.setText( g == null ? "" : g.getTitle() );
                 labelGameSystem.setText( g == null ? "" : g.getSystem() );
+                labelComplete.setText((g == null || !g.getCompleted()) ? "" : "COMPLETED");
             });
         });
         // Bind game timer
@@ -77,6 +91,7 @@ public class MainAppController implements Initializable {
 
         FileUtil.sync("project_name.txt", labelProjectName.textProperty());
         FileUtil.sync("project_timer.txt", labeProjectTimer.textProperty());
+        FileUtil.sync("project_complete_count.txt", completeCount);
 
         // Set button action
         buttonStart.setOnAction(e -> onStart());
@@ -100,14 +115,28 @@ public class MainAppController implements Initializable {
         }
 
         Optional<Game> game = GameManager.INSTANCE().getCurrentGame();
+        Stage stage = (Stage) buttonStart.getScene().getWindow();
         if(!game.isPresent()) {
-            Stage stage = (Stage) buttonStart.getScene().getWindow();
             AlertWindow.showInfo(
                 stage,
                 "No game selected!",
                 "You gotta select a game before you can start the timers.\n"
                 + "Check out Edit -> Set Current Game in the menu above.");
             return;
+        }
+        if(game.get().getCompleted()) {
+            boolean ok = AlertWindow.showConfirm(
+                    stage, 
+                    "Game State Warning", 
+                    "Game is completed", 
+                    "Are you sure you want to start the timer for a completed"
+                + " game? You can, but it is kinda silly.\n"
+                + "(You can also un-complete the game by going to"
+                + " Edit -> Edit Current Game)")
+            .map(bt -> bt.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+            .orElse(false);
+            if(!ok) 
+                return;
         }
 
         engine = new Engine(game.get());

@@ -16,6 +16,7 @@ public class ProjectManager {
      ********************************************************/
     private final Observable<Project> project = new Observable<>(null);
     private final Observable<Long> projectPlaytime = new Observable<>(0L);
+    private final Observable<Long> projectCompleteCount = new Observable<>(0L);
 
     private ProjectManager() {}
 
@@ -40,7 +41,6 @@ public class ProjectManager {
         this.project.addListener(l);
     }
 
-
     public Long getCurrentPlaytime() {
         return this.projectPlaytime.read();
     }
@@ -56,7 +56,14 @@ public class ProjectManager {
     void tickProjectPlaytime() {
         this.projectPlaytime.update( this.projectPlaytime.read() + 1L );
     }
+    
+    public void addProjectCompleteCountListener(ChangeListener<Long> l) {
+        this.projectCompleteCount.addListener(l);
+    }
 
+    void setProjectCompleteCount(Long completeCount) {
+        this.projectCompleteCount.update(completeCount);
+    }
     /********************************************************
      * PERSISTANCE ACCESS
      ********************************************************/
@@ -89,7 +96,7 @@ public class ProjectManager {
                     .orElseThrow(() ->
                         new Exception("Project " + projectID + " missing"));
             setProject(proj);
-            GameManager.INSTANCE().updateProjectPlaytime(qr, proj);
+            GameManager.INSTANCE().updateProjectExportedStatistics(qr, proj);
         }
     }
 
@@ -103,6 +110,7 @@ public class ProjectManager {
      * SINGLETON
      ********************************************************/
     public static ProjectManager INSTANCE() { return INTERNAL.INSTANCE; }
+    
     static class INTERNAL {
         private static final ProjectManager INSTANCE = new ProjectManager();
     }

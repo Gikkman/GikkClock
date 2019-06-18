@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
@@ -28,6 +29,7 @@ public class GameEditController implements Initializable, WindowController {
     @FXML private TextField text_hh;
     @FXML private TextField text_mm;
     @FXML private TextField text_ss;
+    @FXML private CheckBox completed;
 
     private Game game;
 
@@ -40,6 +42,7 @@ public class GameEditController implements Initializable, WindowController {
 
             title.setText(game.getTitle());
             system.setText(game.getSystem());
+            completed.setSelected(game.getCompleted());
 
             String time = TimeFormatter.getHoursMinutesSeconds(game.getPlaytimeSeconds());
             String[] segments = time.split(":");
@@ -90,7 +93,8 @@ public class GameEditController implements Initializable, WindowController {
 
        try {
             QueryRunner qr = MainApp.getDatabase().getQueryRunner();
-            GameManager.INSTANCE().editGame(qr, game, title.getText(), system.getText(), seconds);
+            GameManager.INSTANCE().editGame(qr, game, title.getText(), 
+                    system.getText(), seconds, completed.isSelected());
 
             GameManager.INSTANCE().setGame(qr, game);
             GameManager.INSTANCE().updateProjectPlaytime(qr, game);
